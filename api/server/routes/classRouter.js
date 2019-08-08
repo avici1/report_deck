@@ -1,0 +1,10 @@
+import classController from '../controllers/classController';
+import { Router } from 'express';
+//import ClassController from '../controllers/classController';
+const router  = Router();
+router.get('/class',classController.getListClass);
+router.get('/class/:id',classController.getOneClass_);
+router.post('/class',classController.addClasses);
+router.put('/class/:id',classController.updateClass);
+router.delete('/class/:id',classController.deleteClasses);
+export default router;
