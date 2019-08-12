@@ -1,9 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import classRoutes from './server/routes/classRouter';
+import staffRoutes from './server/routes/staffRoutes';
 const app = express();
 app.use(bodyParser.json());
 app.use('/api', classRoutes);
+app.use('/api/staff',staffRoutes);
 app.use(bodyParser.urlencoded({ extended: false }));
 const port = process.env.PORT || 8001;
 
