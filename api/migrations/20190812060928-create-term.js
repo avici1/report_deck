@@ -9,16 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       maxTj: {
+        type: Sequelize.INTEGER
+      },
+      studentId:{
         type: Sequelize.STRING
       },
       tj: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       maxExam: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       exam: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

@@ -1,0 +1,10 @@
+import {Router} from 'express';
+import term from '../controllers/termController';
+// import router from './classRouter';
+const route = Router();
+route.get('/',term.getAll);
+route.get('/:id',term.getParticular);
+route.put('/:id',term.updateTerm);
+route.delete('/:id',term.deleteTerm);
+route.post('/',term.addNewRecord);
+export default route;

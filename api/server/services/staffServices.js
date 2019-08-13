@@ -1,6 +1,6 @@
 import database from '../../models';
-import { Sequelize } from 'sequelize/lib/operators';
-
+import sequelize from 'sequelize';
+const op = sequelize.Op;
 class staffService {
     static async GetAllStaff() {
         try {
@@ -12,12 +12,21 @@ class staffService {
 
     static async SearchStaff(searchParam) {
         try {
-            const staff = await database.Staff.findOne({where:{staffId:searchParam}});
-            if(staff){
+            const staff = await database.Staff.findAll({
+                where: {
+                    [op.or]: [
+                        { staffId: { [op.like]: '%' + searchParam + '%' } },
+                        { staffNames: { [op.like]: '%' + searchParam + '%' } },
+                        { staffTitle: { [op.like]: '%' + searchParam + '%' } },
+                        
+                    ]
+                }
+            });
+            if (staff) {
                 return staff;
             }
             return null;
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
@@ -32,8 +41,8 @@ class staffService {
         try {
             const StaffToUpdate = await database.Staff.findOne({ where: { staffId: id } });
             if (StaffToUpdate) {
-             await database.Staff.update(newStaff, { where: { staffId: id } });
-             return newStaff;
+                await database.Staff.update(newStaff, { where: { staffId: id } });
+                return newStaff;
             }
             return null;
         } catch (error) {
@@ -44,7 +53,7 @@ class staffService {
         try {
             const staffToDelete = await database.Staff.findOne({ where: { id: Number(id) } });
             if (staffToDelete) {
-                return await database.Staff.destroy({ where: { id: Number(id) } });
+                return await database.Staff.destroy({ where: { staffid: Number(id) } });
             }
         } catch (error) {
             throw error;

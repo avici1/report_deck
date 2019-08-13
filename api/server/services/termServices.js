@@ -1,5 +1,6 @@
 import database from '../../models';
-
+import sequelize from 'sequelize';
+const  op = sequelize;
 class termServices{
     static async addNew(newEntry){
         try {
@@ -14,7 +15,7 @@ class termServices{
     }
     static async deleter(id){
         try {
-            const deleted = await database.Term.destroy({where:{StudentId:id}});
+            const deleted = await database.Term.destroy({where:{studentId:id}});
             if(deleted){
                 return deleted;
             }
@@ -23,9 +24,9 @@ class termServices{
             throw error;
         }
     }
-    static async updater(id,updated){
+    static async updater(id,updated_){
         try {
-            const updated = await database.Term.update(updated,{where:{StudentId:id}});
+            const updated = await database.Term.update(updated_,{where:{studentId:id}});
             if(updated){
                 return updated;
             }
@@ -42,9 +43,19 @@ class termServices{
             throw error;
         }
     }
-    static async getOne(id){
+    static async getOne(searchParam){
         try {
-            const foundTerm = await database.Term.findOne({where:{StudentId:id}});
+            const foundTerm = await database.Term.findAll({
+                where : {
+                    [op.or] : [
+                        {studentId : { [op.like]: '%' + searchParam + '%' }},
+                        {maxTj : { [op.like]: '%' + searchParam + '%' }},
+                        {tj : { [op.like]: '%' + searchParam + '%' }},
+                        {maxExam : { [op.like]: '%' + searchParam + '%' }},
+                        {exam : { [op.like]: '%' + searchParam + '%' }},
+                    ]
+                }
+            });
             if(foundTerm){
                 return foundTerm;
             }

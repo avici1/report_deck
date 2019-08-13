@@ -1,6 +1,7 @@
 import database from '../../models';
 import studentServices from './studentServices';
-
+import sequelize from 'sequelize';
+const op = sequelize.Op;
 class studentsClasservices{
     static async addNew(newEntry){
         try {
@@ -15,7 +16,7 @@ class studentsClasservices{
     }
     static async deleter(id){
         try {
-            const deleted = await database.studentsClass.destroy({where:{id:id}});
+            const deleted = await database.studentsClass.destroy({where:{studentId:id}});
             if(deleted){
                 return deleted;
             }
@@ -26,7 +27,7 @@ class studentsClasservices{
     }
     static async updater(id,updated){
         try {
-            const updated = await database.studentsClass.update(updated,{where:{id:id}});
+            const updated = await database.studentsClass.update(updated,{where:{studentId:id}});
             if(updated){
                 return updated;
             }
@@ -45,7 +46,14 @@ class studentsClasservices{
     }
     static async getOne(id){
         try {
-            const foundTerm = await database.studentsClass.findOne({where:{id:id}});
+            const foundTerm = await database.studentsClass.findAll({
+                where : {
+                    [op.or]:[
+                        {studentId:{[op.like]: '%' + searchParam +'%'}},
+                        {classId: {[op.like] : '%' + searchParam + '%'}}
+                    ]
+                }
+            })
             if(foundTerm){
                 return foundTerm;
             }

@@ -1,9 +1,9 @@
 import database from '../../models';
-import { isNull } from 'util';
+import sequelize from 'sequelize';
 // import Util from 'Util';
-
-class studentServices{
-    static async getAllStudent(){
+const op = sequelize.Op;
+class studentServices {
+    static async getAllStudent() {
         try {
             return await database.Students.findAll();
 
@@ -11,10 +11,17 @@ class studentServices{
             throw error;
         }
     }
-    static async getOneStudent(id){
+    static async getOneStudent(searchParam) {
         try {
-            const foundStudent = await database.Students.findOne({where:{studentId:id}});
-            if(foundStudent){
+            const foundStudent = await database.Students.findAll({
+                where: {
+                    [op.or]: [
+                        { matricule: { [op.like]: '%' + searchParam + '%' } },
+                        { names: { [op.like]: '%' + searchParam + '%' } }
+                    ]
+                }
+            });
+            if (foundStudent) {
                 return foundStudent;
             }
             return null;
@@ -22,10 +29,10 @@ class studentServices{
             throw error;
         }
     }
-    static async UpdateStudent(id,Updated){
+    static async UpdateStudent(id, Updated) {
         try {
-            const updateStudent = await database.Student.update(updated,{where:{studentId:id}})
-            if (updateStudent){
+            const updateStudent = await database.Students.update(Updated, { where: { matricule: id } })
+            if (updateStudent) {
                 return updateStudent;
             }
             return null;
@@ -33,21 +40,21 @@ class studentServices{
             throw error;
         }
     }
-    static async deleteStudent(id){
+    static async deleteStudent(id) {
         try {
-            const deletedStudent = await database.Student.destroy({where:{studentId:id}});
-            if(deletedStudent){
-                return deletedStudent
+            const deletedStudent = await database.Students.destroy({ where: { matricule: id } });
+            if (deletedStudent) {
+                return deletedStudent;
             }
             return null;
         } catch (error) {
             throw error;
         }
     }
-    static async addStudent(newStudent){
+    static async addStudent(newStudent) {
         try {
-            const added = await database.Student.create(newStudent);
-            if (added){
+            const added = await database.Students.create(newStudent);
+            if (added) {
                 return added;
             }
             return null;

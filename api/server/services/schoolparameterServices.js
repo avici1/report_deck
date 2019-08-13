@@ -23,9 +23,9 @@ class schoolParameterServices{
             throw error;
         }
     }
-    static async updater(id,updated){
+    static async updater(id,updated_){
         try {
-            const updated = await database.SchoolParameters.update(updated,{where:{id:id}});
+            const updated = await database.SchoolParameters.update(updated_,{where:{id:id}});
             if(updated){
                 return updated;
             }
