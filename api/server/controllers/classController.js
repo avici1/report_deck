@@ -87,7 +87,7 @@ class ClassController {
                 }
                 
             } catch (error) {
-                util.setError(404,'Oops something Went wrong cant update the book');
+                util.setError(404,'Oops something Went wrong cant update the book >> ' + error.message);
                 return util.send(res);
             }
         }

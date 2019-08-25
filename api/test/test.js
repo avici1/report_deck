@@ -31,7 +31,7 @@ describe('Testing endpoints', () => {
 
             });
     });
-    it(' should get all classes', (done) => {
+    it('should get all classes', (done) => {
         chai.request(app)
             .get('/api/class')
             .set('Accept', 'application/json')
@@ -110,7 +110,7 @@ describe('Testing endpoints', () => {
             .end((err, res) => {
                 expect(res.status).to.equal(404);
                 res.body.should.have.property('message')
-                                    .eql('Please provide a valid parameter')
+                    .eql('Please provide a valid parameter')
             });
         done();
     });
@@ -126,7 +126,7 @@ describe('Testing endpoints', () => {
             .end((err, res) => {
                 expect(res.status).to.equal(404);
                 res.body.should.have.property('message')
-                                    .eql('sent empty fields')
+                    .eql('sent empty fields')
             });
         done();
     });
@@ -146,7 +146,7 @@ describe('Testing endpoints', () => {
             .end((err, res) => {
                 expect(res.status).to.equal(200);
                 res.body.should.have.property('message')
-                                    .eql('Classes updated successfully');
+                    .eql('Classes updated successfully');
                 expect(res.body.data.classYear).to.equal(class_.classYear);
                 expect(res.body.data.classId).to.equal(class_.classId);
                 expect(res.body.data.classMasterTeacher).to.equal(class_.classMasterTeacher);
@@ -163,7 +163,7 @@ describe('Testing endpoints', () => {
             .end((err, res) => {
                 expect(res.status).to.equal(200);
                 res.body.should.have.property('message')
-                                    .eql(`Class with Id ${id} deleted successfully`);
+                    .eql(`Class with Id ${id} deleted successfully`);
 
             });
         done();
@@ -176,7 +176,7 @@ describe('Testing endpoints', () => {
             .end((err, res) => {
                 expect(res.status).to.equal(404);
                 res.body.should.have.property('message')
-                                    .eql(`Please provide a valid parameter`);
+                    .eql(`Please provide a valid parameter`);
 
             });
         done();
@@ -193,6 +193,117 @@ describe('Testing endpoints', () => {
 
             });
         done();
+    });
+    it('should add a staff', (done) => {
+        const newStaff = {
+            "staffId": "44-ange",
+            "staffNames": "Angelique uwimana",
+            "staffTitle": "Computer science teacher"
+        }
+        chai.request(app)
+            .post('/api/staff')
+            .send(newStaff)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                expect(res.status).to.equal(200);
+                expect(res.body.data).to.include({
+                    "staffId": newStaff.staffId,
+                    "staffNames": newStaff.staffNames,
+                    "staffTitle": newStaff.staffTitle
+                });
+            });
+        done();
+    });
+    it('should not  add a staff with incomplete information', (done) => {
+        const newStaff = {
+            "staffId": "444-st"
+        }
+        chai.request(app)
+            .post('/api/staff')
+            .send(newStaff)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                expect(res.status).to.equal(400);
+                res.body.should.have.property("message")
+                    .eql("Please send complete information");
+
+            });
+        done();
+    });
+    it('should update a staff', (done) => {
+        const id = 1;
+        const updatedStaff = {
+            "staffId": "3434",
+            "staffNames": "Alain Christian",
+            "staffTitle": "CS Teacher"
+        }
+        chai.request(app)
+            .put(`/api/staff/${id}`)
+            .send(updatedStaff)
+            .set('Accept', 'application/json')   
+            .end((err, res) => {
+                expect(res.status).to.equal(200);
+                expect(res.body).to.include({
+                    "staffId": updatedStaff.staffId,
+                    "staffNames": updatedStaff.staffNames,
+                    "staffTitle": updatedStaff.staffTitle
+                });
+            });
+        done();
+    });
+    it('should not update a staff with empty body', (done) => {
+        const id = '34';
+        const updatedStaff_ = {
+
+        };
+        chai.request(app)
+            .put(`/api/staff/${id}`)
+            .set('Accept', 'application/json')
+            .send(updatedStaff_)
+            .end((err, res) => {
+                expect(res.status).to.equal(400);
+                res.body.should.have.property("message")
+                    .eql("You sent empty body");
+            });
+        done();
+    });
+    it('should get all staff', (done) => {
+        chai.request(app)
+            .get('/api/staff/')
+            .set('Accept','application/json')
+            .end((err,res) => {
+                expect(res.status).to.equal(200)
+                res.body.should.have.property('message')
+                        .eql('Staff found successfully');
+                res.body.data[0].should.have.property('staffId');
+                res.body.data[0].should.have.property('staffNames');
+                res.body.data[0].should.have.property('staffTitle');   
+                done(); 
+            });
+           
+    });
+    it('should delete a staff', (done) =>{
+        const id = '1';
+        chai.request(app)
+            .delete(`/api/staff/${id}`)
+            .set('Accept','application/json')
+            .end((err,res) => {
+                expect(res.status).to.equal(200)
+                res.body.should.have.property('message')
+                               .eql(`Staff with Id ${id} deleted succefully`)
+            });
+    });
+    it('should not delete a staff with invalid search parameter', (done) => {
+        const id  = '';
+
+        chai.request(app)
+            .delete(`/api/staff/${id}`)
+            .set('Accept','application/json')
+            .end((err,res) => {
+                expect(res.status).to.equal(404)
+                res.body.should.have.property('message')
+                                    .eql(`Staff with Id ${id} not found`)
+            });
     });
 
 })

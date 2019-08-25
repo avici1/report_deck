@@ -532,8 +532,7 @@
                 "items": [
                     {
                         "id": "workbench.action.navigateBack",
-                        "label": "&&Back",
-                        "enabled": false
+                        "label": "&&Back"
                     },
                     {
                         "id": "workbench.action.navigateForward",
@@ -1352,5 +1351,19 @@
         }
     },
     "theme": "vs-dark",
-    "themeBackground": "#1e1e1e"
+    "themeBackground": "#252526",
+    "windowsState": {
+        "lastActiveWindow": {
+            "folder": "file:///home/gal1le0/development/native/report_deck",
+            "backupPath": "/home/gal1le0/development/native/report_deck/=/home/gal1le0/vscodefiles/Backups/94dec35814f6623ffeac573e9c8e593c",
+            "uiState": {
+                "mode": 0,
+                "x": 171,
+                "y": 58,
+                "width": 1024,
+                "height": 686
+            }
+        },
+        "openedWindows": []
+    }
 }
